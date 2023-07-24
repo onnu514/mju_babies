@@ -57,7 +57,7 @@ int main() {
 	}
 	for (int i = 0; i < num; i++) {
 		printStu(students[i]);
-		printf("\n");
+		printf("\n");	// test
 	}
 
 	return 0;
