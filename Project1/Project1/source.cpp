@@ -51,34 +51,36 @@ void SortByAge(struct student** stu, int size) {
 	}
 }
 
-void DeleteStu(struct student** stu, int *size) {
+void DeleteStu(struct student** stu, int *size) {				//특정 학생 지우는 함수
 	char check[10] ;
 	scanf("%s",check);		// id 대조용
 
 	int found = -1;
 
 	for (int i = 0; i < *size; i++) {
-		if (strcmp(check, stu[i]->id) == 0) {
-			found = i;
-			break;
+		if (strcmp(check, stu[i]->id) == 0) {				//여기서 입력받은 학번 (check) 와 stu->id를 비교
+			found = i;										//만약에 찾으면 해당 학번의 학생이 몇번째에 있는지  found 에 저장
+			break;	
 		}
-	}
-	if (found == -1) {
+	}	
+	if (found == -1) {										// 만약에 없으면 존재x라고 출력
 		printf("존재x\n");
 		return ;
 	}
-	free(stu[i]->name);
-	free(stu[i]->id);
 
-	for (int j = found; j < *size - 1; j++) {
+	free(stu[found]->name);									//free를 해줘서 없애줌
+	free(stu[found]->id);
+
+	for (int j = found; j < *size - 1; j++) {				//한칸씩 땡겨준다
 		stu[j] = stu[j + 1];
 	}
 
 	free(stu[*size - 1]);
-	(*size)--;
+	(*size)--;												//한칸이 사라져서 size 자체도 줄여준다 
 }
 
-void inputStu(struct student* stu) {
+void inputStu(struct student* stu) {										// 학생 정보 입력하는 함수
+
 	char tName[30];
 	char tId[10];
 	
@@ -93,7 +95,7 @@ void inputStu(struct student* stu) {
 	
 }
 
-void printStu(struct student*** stu, int size){
+void printStu(struct student*** stu, int size){									// 모든 학생 정보 출력하는 함수
 	
 	for (int i = 0; i < size; i++) {
 		printf("%s %s %d", (*stu)[i]->name, (*stu)[i]->id, (*stu)[i]->age);
@@ -102,19 +104,19 @@ void printStu(struct student*** stu, int size){
 	
 }
 
-void Totalinput(struct student*** stu, struct student *** substu, int *size){
+void Totalinput(struct student*** stu, struct student *** substu, int *size){	//	main 에서는 함수 하나만 남겨두기 위해서 stu와 substu, size의 정보를 totalinput 함수에 넘겨줌
 	int tempsize = *size;
 	
 	printf("이름 나이 학번을 입력하세요\n");
 
-	if (tempsize == 0) {
+	if (tempsize == 0) {														//만약 처음 입력을 받는 경우에는 바로 stu에 저장해준다
 		*stu = (struct student**)malloc(sizeof(struct student*));
 		(*stu)[0] = (struct student*)malloc(sizeof(struct student));
 		inputStu((*stu)[0]);														
 		tempsize++;
 	}
 	else
-	{
+	{																						//만약 처음이 아니라면 stu의 사이즈를 늘려줘야 하는데 
 		*substu = (struct student**)malloc(sizeof(struct student *)*tempsize);
 		
 		for (int i = 0; i < tempsize; i++) {
@@ -148,14 +150,7 @@ int main() {
 	struct student** students = NULL;
 	int size = 0;
 	int menu = 0;
-//	int num;
 
-//	scanf("%d", &num);
-//	students = (struct student**)malloc(sizeof(struct student*) * num);
-
-//	for (int i = 0; i < num; i++) {
-//		students[i] = (struct student*)malloc(sizeof(struct student));
-//	}
 
 	struct student** substu = NULL;
 	
@@ -167,23 +162,22 @@ int main() {
 	while (menu != 6) {
 
 		if (menu == 1) {
-			Totalinput(&students, &substu, &size);
-			
+			Totalinput(&students, &substu, &size);		//학생을 추가하는 함수
 		}
 	
 		if (menu == 2) {
-			DeleteStu(students,&size);
+			DeleteStu(students,&size);					//학생을 삭제 하는 함수
 		}
 		if (menu == 3) {
-			SearchId(&students, size);
+			SearchId(&students, size);					//학생의 학번을 받아서 조회 하는 함수
 		}
 
 		if (menu == 4) {	
-			printStu(&students,size);		
+			printStu(&students,size);					//현재 저장되어있는 학생들의 정보를 출력 하는 함수
 		}
 
 		if (menu == 5) {			
-			SortByAge(students, size);
+			SortByAge(students, size);					// 저장되어 있는 학생들 나이순 정렬
 		}
 		printf("1.학생추가\n2.학생삭제\n3.학생id조회\n4.모든학생조회\n5.학생 나이순 정렬\n6.종료\n");
 
